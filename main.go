@@ -5,10 +5,9 @@ import (
 	"math/rand/v2"
 	"time"
 	"os"
-	"os/exec"
 	flag "github.com/spf13/pflag"
 	"strings"
-	//"github.com/inancgumus/screen"
+	"github.com/inancgumus/screen"
 )
 type Cell struct {
 	State bool
@@ -16,13 +15,6 @@ type Cell struct {
 }
 
 func mod(a int, b int) int { return (a%b + b) % b }
-
-func runCmd(n string) error{
-	cmd := exec.Command(n)
-	cmd.Stdout = os.Stdout
-	err := cmd.Run()
-	return err
-}
 
 func sameColor(a, b Cell) bool {
 	return a.R == b.R && a.G == b.G && a.B == b.B
@@ -136,6 +128,8 @@ func colorCheck(a []uint8, b []uint8) bool {
 }
 
 func main () {
+	width := flag.Int("x", 106, "width of grid in double wide characters")
+	height := flag.Int("y", 61, "height of grid")
 	prob := flag.Int("prob", 10, "probability of cell spawning during initialization")
 	tm := flag.Int("time", 250, "number of milliseconds to wait between generations")
 	dth := flag.Int("death", 0, "probability of cell death within generation")
@@ -174,8 +168,8 @@ func main () {
 		count++
 	}
 
-	dx := 106
-	dy := 61
+	dx := *width
+	dy := *height
 	a := make([][]Cell, dy)
 	for i := range a {
 		a[i] = make([]Cell, dx)
@@ -202,10 +196,8 @@ func main () {
 	for alive {
 		out, alive = renderLine(a)
 		a = conway(a, dx, dy, *dth, *life, *mut, color)
-		err := runCmd("reset")
-		if err != nil {
-			panic(err)
-		}
+		screen.Clear()
+		screen.MoveTopLeft()
 		fmt.Print(out)
 		time.Sleep(time.Duration(*tm) * time.Millisecond)
 	}
