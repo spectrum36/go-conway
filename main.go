@@ -129,7 +129,7 @@ func colorCheck(a []uint8, b []uint8) bool {
 
 func main () {
 	width := flag.Int("x", 106, "width of grid in double wide characters")
-	height := flag.Int("y", 61, "height of grid")
+	height := flag.Int("y", 60, "height of grid")
 	prob := flag.Int("prob", 10, "probability of cell spawning during initialization")
 	tm := flag.Int("time", 250, "number of milliseconds to wait between generations")
 	dth := flag.Int("death", 0, "probability of cell death within generation")
